@@ -1,0 +1,9 @@
+@media (min-width: $break-large) {
+ .container {
+    width: $break-large;
+ }
+}
+
+.table-responsive {
+    margin-bottom: 0px;
+}

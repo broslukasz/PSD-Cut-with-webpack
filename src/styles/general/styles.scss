@@ -1,0 +1,14 @@
+@import 'common/variables';
+@import 'common/responsiveness';
+@import 'common/main';
+@import 'common/bootstrap-override';
+@import 'brand-specyfic';
+
+// Styles for elements
+
+@import 'general/elements/header';
+@import 'general/elements/navigation';
+
+// Styles for pages
+@import 'general/pages/home';
+@import 'general/pages/ilustrations';
