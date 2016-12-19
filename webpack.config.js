@@ -1,35 +1,80 @@
-var path = require('path');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
-var ExtractTextPlugin = require("extract-text-webpack-plugin");
-var webpack = require('webpack');
+let path = require('path');
+let HtmlWebpackPlugin = require('html-webpack-plugin');
+let ExtractTextPlugin = require("extract-text-webpack-plugin");
+let webpack = require('webpack');
 
-var stylesGeneral = 'src/styles/general/styles.scss';
-var stylesSpecyfic = 'src/styles/general/brand-specyfic.scss';
+let stylesGeneral = 'src/styles/general/styles.scss';
+let stylesSpecyfic = 'src/styles/general/brand-specyfic.scss';
+let stylesBootstrap = 'src/styles/general/common/lib/bootstrap.scss';
+let stylesFontAwesome = 'src/styles/general/common/lib/font-awesome.scss';
 
-var extractCSS = new ExtractTextPlugin('stylesheets/styles.css');
-var extractCSSBrandSpecyfic = new ExtractTextPlugin('stylesheets/brand-specyfic.css');
-var indexFileConfig = () => {
+let extractCSS = new ExtractTextPlugin('stylesheets/styles.css');
+let extractCSSBrandSpecyfic = new ExtractTextPlugin('stylesheets/brand-specyfic.css');
+let extractCSSBootstrap = new ExtractTextPlugin('stylesheets/bootstrap.css');
+let extractCSSFontAwsome = new ExtractTextPlugin('stylesheets/font-awsome.css');
+
+
+let pageName = process.env.PAGES || '';
+
+let pluginForIndex = new HtmlWebpackPlugin({
+                    filename: `index.html`,
+                    hash: false,
+                    inject: 'body',
+                    template: `./src/templates/${pageName}.jade`
+                })
+
+let createIndexFile = process.env.BUILD ? false : pluginForIndex; 
+
+let pages = process.env.PAGES.split(',')
+
+let allPlugins = [
+      extractCSSBootstrap,
+      extractCSSFontAwsome,
+      extractCSS,
+      extractCSSBrandSpecyfic,
+      new webpack.DefinePlugin({
+        VERSION: JSON.stringify(pageName)
+      }),
+      new webpack.ProvidePlugin({
+        $: "jquery",
+        jQuery: "jquery"
+      }),
+      createIndexFile
+]
+
+let buildFiles = (page) => {
     return new HtmlWebpackPlugin({
-        filename: `index.html`,
+        filename: `${page}.html`,
         hash: false,
         inject: 'body',
-        template: `./src/${pageName}.jade`
+        template: `./src/templates/${page}.jade`
     })
 }
 
-var pageName = process.env.PAGE_NAME || '';
-var createIndexFile = process.env.BUILD ? false : indexFileConfig(); 
+let buildAll = () => {
+    pages.forEach((page) => {
+        allPlugins.push(buildFiles(page))
+    });
+}
 
-var defaultConfig = {
+buildAll();
+
+let defaultConfig = {
     context: __dirname,
     resolve: {
         root: path.join(__dirname, '/src/')
     },
 }
 
-var commonConfig = {
+let commonConfig = {
     module: {
         loaders: [
+            { test: /\.scss$/,
+              include: path.resolve('src/styles/general/common/lib/bootstrap.scss'),
+              loader: extractCSSBootstrap.extract(['css','sass']) },
+            { test: /\.scss$/,
+              include: path.resolve('src/styles/general/common/lib/font-awesome.scss'),
+              loader: extractCSSFontAwsome.extract(['css','sass']) },
             { test: /\.scss$/,
               include: path.resolve('src/styles/general/styles.scss'),
               loader: extractCSS.extract(['css','sass']) },
@@ -41,11 +86,15 @@ var commonConfig = {
     }
 }
 
-var clientConfigJS = {
+let clientConfigJS = {
     //devtool: "source-map",
     target: 'web',
     entry: {
-        'entry.js': ['./src/entry.js', path.resolve(stylesGeneral), path.resolve(stylesSpecyfic)]
+        'entry.js': ['./src/entry.js',
+                    path.resolve(stylesBootstrap),
+                    path.resolve(stylesFontAwesome),
+                    path.resolve(stylesGeneral),
+                    path.resolve(stylesSpecyfic)]
     },
     output: {
         path: path.join(__dirname, 'public'),
@@ -58,23 +107,10 @@ var clientConfigJS = {
         process: true,
         Buffer: false
     },
-    plugins: [
-      extractCSS,
-      extractCSSBrandSpecyfic,
-      new webpack.DefinePlugin({
-        VERSION: JSON.stringify(pageName)
-      }),
-      new HtmlWebpackPlugin({
-        filename: `${pageName}.html`,
-        hash: false,
-        inject: 'body',
-        template: `./src/${pageName}.jade`
-      }),
-      createIndexFile
-    ].filter((plugin) => { return plugin !== false})
+    plugins: allPlugins.filter((plugin) => { return plugin !== false})
 };
 
-var webpackMerge = require('webpack-merge');
+let webpackMerge = require('webpack-merge');
 
 module.exports = [
 

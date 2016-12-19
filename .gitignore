@@ -3,3 +3,4 @@
 /public/stylesheets/
 /public/*.html
 *.log
+/.vscode/

@@ -1,3 +1,3 @@
 // Put your javascript modules here
 
-console.log("Running App, version: " + VERSION);
+require('js/bootstrap.min.js');

@@ -1,12 +1,11 @@
 // Breakpoints
 
-$break-small: 768px;
-$break-medium: 992px;
-$break-large: 1080px;
+$break-small: 767px;
+$break-medium: 991px;
+$break-large: 1079px;
 
-$desktop-width: 1080px;
 
-@mixin makeResponsive($attribute, $mobile, $tablet, $desktop) {
+@mixin makeResponsiveOld($attribute, $mobile, $tablet, $desktop) {
     @media screen and (max-width: $break-small) {
         #{$attribute}: $mobile;
     }
@@ -20,8 +19,49 @@ $desktop-width: 1080px;
     }
 }
 
-@mixin rwdStyle($attribute, $mobile, $tablet, $desktop) {
-    @include makeResponsive($attribute, $mobile, $tablet, $desktop);
+@mixin rwdStyleOld($attribute, $mobile, $tablet, $desktop) {
+    @include makeResponsiveOld($attribute, $mobile, $tablet, $desktop);
+}
+
+@mixin makeResponsive($attribute, $media-xs, $media-sm, $media-md, $media-lg) {
+    @media screen and (max-width: $break-small) {
+        #{$attribute}: $media-xs;
+    }
+
+    @media screen and (min-width: $break-small+1) and (max-width: $break-medium) {
+        #{$attribute}: $media-sm;
+    }
+
+    @media screen and (min-width: $break-medium+1) and (max-width: $break-large) {
+        #{$attribute}: $media-md;
+    }
+
+    @media screen and (min-width: $break-large+1) {
+        #{$attribute}: $media-lg;
+    }
+}
+
+@mixin rwdStyle($attribute, $media-xs, $media-sm, $media-md, $media-lg) {
+    @include makeResponsive($attribute, $media-xs, $media-sm, $media-md, $media-lg);
+}
+
+@mixin onlyTo($attribute, $media, $value, $rest) {
+  @if $media == media-xs {
+    #{$attribute}: $rest;
+    @include respond-to($media) { #{$attribute}: $value;}
+  }
+  @else if $media == media-sm {
+    #{$attribute}: $rest;
+    @include respond-to($media) { #{$attribute}: $value;}
+  }
+  @else if $media == media-md {
+    #{$attribute}: $rest;
+    @include respond-to($media) { #{$attribute}: $value;}
+  }
+  @else if $media == media-lg {
+    #{$attribute}: $rest;
+    @include respond-to($media) { #{$attribute}: $value;}
+  }
 }
 
 @mixin respond-to($media) {
@@ -29,32 +69,12 @@ $desktop-width: 1080px;
     @media only screen and (max-width: $break-small) { @content; }
   }
   @else if $media == media-sm {
-    @media only screen and (min-width: $break-small + 1) and (max-width: $break-medium) { @content; }
+    @media only screen and (min-width: $break-small+1) and (max-width: $break-medium) { @content; }
   }
   @else if $media == media-md {
-    @media only screen and (min-width: $break-medium + 1) and (max-width: $break-large) { @content; }
+    @media only screen and (min-width: $break-medium+1) and (max-width: $break-large) { @content; }
   }
   @else if $media == media-lg {
-    @media only screen and (min-width: $break-large + 1) { @content; }
+    @media only screen and (min-width: $break-large+1) { @content; }
   }
-}
-
-// Responsive font-sizes
-
-@mixin responsiveFontSize($type) {
-    @if $type == Vbig {
-            @include rwdStyle(font-size, $font-vbig-size, $font-vbig-size, $font-vbig-desktop-size);
-    }
-
-    @if $type == Big {
-            @include rwdStyle(font-size, $font-big-size, $font-big-size, $font-big-desktop-size);
-    }
-    
-    @if $type == Medium {
-            @include rwdStyle(font-size, $font-medium-size, $font-medium-size, $font-medium-desktop-size);
-    }
-
-    @if $type == Basic {
-            @include rwdStyle(font-size, $font-medium-size, $font-medium-size, $font-medium-desktop-size);
-    }
 }

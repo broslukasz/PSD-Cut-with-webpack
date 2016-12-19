@@ -1,45 +1,22 @@
-@mixin textColor($color) {
-    color: $color;
-    font-family: RobotoMedium;
-}
-
 body {
     font-family: Roboto;
-    @include rwdStyle(font-size, $font-small-size, $font-basic-size, $font-basic-size);
+    @include rwdStyleOld(font-size, $font-small-size, $font-basic-size, $font-basic-size);
     font-size: $font-basic-size;
 }
 
-h1 {
-    @include rwdStyle(font-size, $font-MobSize-headline01, $font-size-headline01, $font-size-headline01);
-}
+$fa-version: "4.7.0" !default;
 
-h2 {
-    @include rwdStyle(font-size, $font-big-MobSize, $font-big-MobSize, $font-vbig-size);
-    color: $main-color;
-    //line-height: 70px;
-}
-
-h3 {
-    @include rwdStyle(font-size, $font-big-MobSize, $font-big-MobSize, $font-vbig-size);
-    @include rwdStyle(color, black, inherit, inherit);
-    @include rwdStyle(line-height, 24px, 70px, 70px);
-}
-
-h1, h2, h3, h4, h5, h6 {
-    //margin: 0;
-}
-
-.pd-clearfix:before, .pd-clearfix:after {
-    content: "";
-    display: table;
-}
-
-.pd-clearfix:after {
-    //clear: both;
-}
-
-.pd-clearfix {
-    //*zoom: 1;
+@font-face {
+  font-family: 'FontAwesome';
+  src: url('/public/fonts/font_awesome/fontawesome-webfont.eot?v=#{$fa-version}');
+  src: url('/public/fonts/font_awesome/fontawesome-webfont.eot?#iefix&v=#{$fa-version}') format('embedded-opentype'),
+  url('/public/fonts/font_awesome/fontawesome-webfont.woff2?v=#{$fa-version}') format('woff2'),
+  url('/public/fonts/font_awesome/fontawesome-webfont.woff?v=#{$fa-version}') format('woff'),
+  url('/public/fonts/font_awesome/fontawesome-webfont.ttf?v=#{$fa-version}') format('truetype'),
+  url('/public/fonts/font_awesome/fontawesome-webfont.svg?v=#{$fa-version}#fontawesomeregular') format('svg');
+  //  src: url('/public/fonts/font_awesome/FontAwesome.otf') format('opentype'); // used when developing fonts
+  font-weight: normal;
+  font-style: normal;
 }
 
 @font-face {

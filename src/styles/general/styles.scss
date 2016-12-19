@@ -1,3 +1,5 @@
+// Common styles
+
 @import 'common/variables';
 @import 'common/responsiveness';
 @import 'common/main';
@@ -6,9 +8,16 @@
 
 // Styles for elements
 
-@import 'general/elements/header';
-@import 'general/elements/navigation';
+@import 'specyfic/elements/header';
+@import 'specyfic/elements/footer';
+@import 'specyfic/elements/navigation';
+@import 'specyfic/elements/buttons';
 
 // Styles for pages
-@import 'general/pages/home';
-@import 'general/pages/ilustrations';
+@import 'specyfic/pages/home';
+@import 'specyfic/pages/illustration';
+@import 'specyfic/pages/login';
+@import 'specyfic/pages/error';
+@import 'specyfic/pages/additional-info';
+@import 'specyfic/pages/consultant';
+@import 'specyfic/pages/needs';
