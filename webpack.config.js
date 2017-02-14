@@ -81,13 +81,17 @@ let commonConfig = {
             { test: /\.scss$/,
               include: path.resolve('src/styles/general/brand-specyfic.scss'),
               loader: extractCSSBrandSpecyfic.extract(['css','sass']) },
-            { test: /\.jade$/, loader: 'jade' }
+            { test: /\.jade$/, loader: 'jade' },
+            {
+                test: /\.js$/,
+                loader: 'babel-loader'
+            }
         ]
     }
 }
 
 let clientConfigJS = {
-    //devtool: "source-map",
+    devtool: "inline-source-map",
     target: 'web',
     entry: {
         'entry.js': ['./src/entry.js',
